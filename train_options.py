@@ -53,11 +53,11 @@ parser.add_argument('--clip', type=float, default=0.5,
                     help='Gradient clipping.')
 # parser.add_argument('--schedule', default='15000,40000,100000,250000', type=str,
 #                     help='Schedule milestones.')
-parser.add_argument('--schedule', default='50000,60000,70000,80000,90000', type=str,
+parser.add_argument('--schedule', default='10, 100, 5000,10000,20000,50000,60000,70000,80000,90000,100000', type=str,
                     help='Schedule milestones.')
 parser.add_argument('--gamma', type=float, default=0.5,
                     help='LR decay factor.')
-parser.add_argument('--batch-size', type=int, default=16, 
+parser.add_argument('--batch-size', type=int, default=4, 
                     help='Batch size.')
 parser.add_argument('--eval-batch-size', type=int, default=1,
                     help='Batch size for evaluation.')
