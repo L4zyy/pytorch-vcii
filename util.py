@@ -13,6 +13,39 @@ import network
 from metric import msssim, psnr
 from unet import UNet
 
+def load_model(args):
+    """Load all pytorch components of the model"""
+
+    # Get pytorch models
+    encoder, binarizer, decoder, unet = get_models(
+        args=args, v_compress=args.v_compress, 
+        bits=args.bits,
+        encoder_fuse_level=args.encoder_fuse_level,
+        decoder_fuse_level=args.decoder_fuse_level)
+
+    nets = [encoder, binarizer, decoder]  # All nets
+    if unet is not None:  # If using unet
+        nets.append(unet)
+
+    # Will absolutely use GPUs
+    gpus = [int(gpu) for gpu in args.gpus.split(',')]
+    if len(gpus) > 1:
+        print("Using GPUs {}.".format(gpus))
+        for net in nets:
+            net = nn.DataParallel(net, device_ids=gpus)
+    
+    # params to be optimized
+    params = [{'params': net.parameters()} for net in nets]
+
+    # Using Adam optimizer
+    solver = optim.Adam(
+        params,
+        lr=args.lr)
+
+    milestones = [int(s) for s in args.schedule.split(',')]
+    scheduler = LS.MultiStepLR(solver, milestones=milestones, gamma=args.gamma)
+
+    return nets, solver, milestones, scheduler
 
 def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
 

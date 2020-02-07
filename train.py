@@ -16,10 +16,17 @@ from dataset import get_loader
 from evaluate import run_eval
 from train_options import parser
 from training_oprations import save, resume
-from util import get_models, init_lstm, set_train, set_eval
+from util import get_models, init_lstm, set_train, set_eval, load_model
 from util import prepare_inputs, forward_ctx
 
-def load_model(args):
+
+
+def train():
+    
+    # Using the original argument parser
+    args = parser.parse_args()
+    print(args)
+
 
     # Load training data
     train_loader = get_loader(
@@ -28,45 +35,8 @@ def load_model(args):
         args=args
     )
 
-    # Get pytorch models
-    encoder, binarizer, decoder, unet = get_models(
-        args=args, v_compress=args.v_compress, 
-        bits=args.bits,
-        encoder_fuse_level=args.encoder_fuse_level,
-        decoder_fuse_level=args.decoder_fuse_level)
-
-    nets = [encoder, binarizer, decoder]  # All nets
-    if unet is not None:  # If using unet
-        nets.append(unet)
-
-    # Will absolutely use GPUs
-    gpus = [int(gpu) for gpu in args.gpus.split(',')]
-    if len(gpus) > 1:
-        print("Using GPUs {}.".format(gpus))
-        for net in nets:
-            net = nn.DataParallel(net, device_ids=gpus)
-    
-    # params to be optimized
-    params = [{'params': net.parameters()} for net in nets]
-
-    # Using Adam optimizer
-    solver = optim.Adam(
-        params,
-        lr=args.lr)
-
-    milestones = [int(s) for s in args.schedule.split(',')]
-    scheduler = LS.MultiStepLR(solver, milestones=milestones, gamma=args.gamma)
-
-    return train_loader, nets, solver, milestones, scheduler
-
-def main():
-    
-    # Using the original argument parser
-    args = parser.parse_args()
-    print(args)
-
     # Load model
-    train_loader, nets, solver, milestones, scheduler = load_model(args)
+    nets, solver, milestones, scheduler = load_model(args)
 
     # Check if resume training
     train_iter = 0
@@ -185,4 +155,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    train()
