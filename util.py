@@ -13,6 +13,30 @@ import network
 from metric import msssim, psnr
 from unet import UNet
 
+def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
+
+    encoder = network.EncoderCell(
+        v_compress=v_compress,
+        stack=args.stack,
+        fuse_encoder=args.fuse_encoder,
+        fuse_level=encoder_fuse_level
+    ).cuda()
+
+    binarizer = network.Binarizer(bits).cuda()
+
+    decoder = network.DecoderCell(
+        v_compress=v_compress, shrink=args.shrink,
+        bits=bits,
+        fuse_level=decoder_fuse_level
+    ).cuda()
+
+    if v_compress:
+        unet = UNet(3, args.shrink).cuda()
+    else:
+        unet = None
+
+    return encoder, binarizer, decoder, unet
+
 def load_model(args):
     """Load all pytorch components of the model"""
 
@@ -46,30 +70,6 @@ def load_model(args):
     scheduler = LS.MultiStepLR(solver, milestones=milestones, gamma=args.gamma)
 
     return nets, solver, milestones, scheduler
-
-def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
-
-    encoder = network.EncoderCell(
-        v_compress=v_compress,
-        stack=args.stack,
-        fuse_encoder=args.fuse_encoder,
-        fuse_level=encoder_fuse_level
-    ).cuda()
-
-    binarizer = network.Binarizer(bits).cuda()
-
-    decoder = network.DecoderCell(
-        v_compress=v_compress, shrink=args.shrink,
-        bits=bits,
-        fuse_level=decoder_fuse_level
-    ).cuda()
-
-    if v_compress:
-        unet = UNet(3, args.shrink).cuda()
-    else:
-        unet = None
-
-    return encoder, binarizer, decoder, unet
 
 
 def get_identity_grid(size):
