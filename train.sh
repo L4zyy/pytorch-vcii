@@ -42,12 +42,10 @@ fi
 
 python -u train.py \
   --train ${train} \
-  --eval ${eval} \
   --train-mv ${train_mv} \
-  --eval-mv ${eval_mv} \
   --encoder-fuse-level ${encoder_fuse_level} \
   --decoder-fuse-level ${decoder_fuse_level} \
   --v-compress --warp --stack --fuse-encoder \
   --bits ${bits} \
   --distance1 ${distance1} --distance2 ${distance2} \
-  --max-train-iters 100
+  --max-train-iters 10000

@@ -1,12 +1,12 @@
-"""Training options."""
+"""Evaluation options"""
 
 import argparse
 
 parser = argparse.ArgumentParser()
 
 ######## Data ########
-parser.add_argument('--train', required=True, type=str,
-                    help='Path to training data.')
+# parser.add_argument('--train', required=True, type=str,
+#                     help='Path to training data.')
 parser.add_argument('--eval', required=True, type=str,
                     help='Path to eval data.')
 # (distance1, distance2) should be (1, 2), (3, 3), or (6, 6).
@@ -15,8 +15,8 @@ parser.add_argument('--distance1', type=int,
                     help='Distance to left interpolation source.')
 parser.add_argument('--distance2', type=int,
                     help='Distance to right interpolation source.')
-parser.add_argument('--train-mv', type=str,
-                    help='Path to motion vectors of training set.')
+# parser.add_argument('--train-mv', type=str,
+#                     help='Path to motion vectors of training set.')
 parser.add_argument('--eval-mv', type=str,
                     help='Path to motion vectors of evaluation set.')
 
@@ -45,22 +45,21 @@ parser.add_argument('--stack', action='store_true',
                     help='Whether to stack context frames as encoder input.')
 
 ######## Learning ########
-parser.add_argument('--max-train-iters', type=int, default=100000,
-                    help='Max training iterations.')
-parser.add_argument('--lr', type=float, default=0.00025,
-                    help='Learning rate.')
-parser.add_argument('--clip', type=float, default=0.5,
-                    help='Gradient clipping.')
+# parser.add_argument('--max-train-iters', type=int, default=100000,
+#                     help='Max training iterations.')
+# parser.add_argument('--lr', type=float, default=0.00025,
+#                     help='Learning rate.')
+# parser.add_argument('--clip', type=float, default=0.5,
+#                     help='Gradient clipping.')
 # parser.add_argument('--schedule', default='15000,40000,100000,250000', type=str,
 #                     help='Schedule milestones.')
-parser.add_argument('--schedule', default='10, 20, 50, 100, 200, 500, 1000, 2000, 5000,10000,20000,50000, 100000', type=str,
-                    help='Schedule milestones.')
-parser.add_argument('--gamma', type=float, default=0.5,
-                    help='LR decay factor.')
-parser.add_argument('--batch-size', type=int, default=8, 
-                    help='Batch size.')
-parser.add_argument('--eval-batch-size', type=int, default=1,
-                    help='Batch size for evaluation.')
+# parser.add_argument('--schedule', default='10, 20, 50, 100, 200, 500, 1000, 2000, 5000,10000,20000, 50000, 100000', type=str, help='Schedule milestones.')
+# parser.add_argument('--gamma', type=float, default=0.5,
+#                     help='LR decay factor.')
+# parser.add_argument('--batch-size', type=int, default=6, 
+#                     help='Batch size.')
+# parser.add_argument('--eval-batch-size', type=int, default=1,
+#                     help='Batch size for evaluation.')
 
 # To save computation, we compute objective for multiple
 # crops for each forward pass.
@@ -86,5 +85,5 @@ parser.add_argument('--save-out-img', action='store_true',
                     help='If true, save output images during eval.')
 parser.add_argument('--checkpoint-iters', type=int, default=100,
                     help='Model checkpoint period.')
-parser.add_argument('--eval-iters', type=int, default=4500,
-                    help='Evaluation period.')
+# parser.add_argument('--eval-iters', type=int, default=4500,
+#                     help='Evaluation period.')

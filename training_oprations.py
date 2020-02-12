@@ -1,6 +1,7 @@
 """
      resume and save model training
 """
+import torch
 
 def resume(args, nets, index):
     names = ['encoder', 'binarizer', 'decoder', 'unet']
@@ -16,7 +17,7 @@ def resume(args, nets, index):
             net.load_state_dict(torch.load(checkpoint_path))
     return nets
 
-def save(args, nets, index):
+def save(args, nets, index, encoder):
     names = ['encoder', 'binarizer', 'decoder', 'unet']
 
     for net_idx, net in enumerate(nets):

@@ -14,7 +14,7 @@ from torch.autograd import Variable
 
 from dataset import get_loader
 from evaluate import run_eval
-from train_options import parser
+from train_only_options import parser
 from training_oprations import save, resume
 from util import get_models, init_lstm, set_train, set_eval, load_model
 from util import prepare_inputs, forward_ctx
@@ -141,13 +141,14 @@ def train():
                     bp_t1 - bp_t0, 
                     batch_t1 - batch_t0))
 
-            if train_iter % 100 == 0:
+            if (train_iter-1) % 100 == 0:
                 print('Loss at each step:')
                 print(('{:.4f} ' * args.iterations +
-                    '\n').format(* [l.data[0] for l in losses]))
+                    '\n').format(* [l.data.item() for l in losses]))
 
-            if train_iter % args.checkpoint_iters == 0:
-                save(args, nets, train_iter)
+            if (train_iter-1) % args.checkpoint_iters == 0:
+                print("saving model")
+                save(args, nets, train_iter, encoder)
 
         if train_iter > args.max_train_iters:
             print('Training done.')

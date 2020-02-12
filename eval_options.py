@@ -1,4 +1,0 @@
-"""Evaluation options"""
-
-import argparse
-

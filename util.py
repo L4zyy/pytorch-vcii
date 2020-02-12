@@ -8,13 +8,15 @@ import torch
 from torch.autograd import Variable
 import torch.nn.functional as F
 import torch.nn as nn
+import torch.optim as optim
+import torch.optim.lr_scheduler as LS
 
 import network
 from metric import msssim, psnr
 from unet import UNet
 
 def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
-
+    """Build the network of the model"""
     encoder = network.EncoderCell(
         v_compress=v_compress,
         stack=args.stack,

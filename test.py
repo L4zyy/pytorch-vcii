@@ -12,13 +12,52 @@ import torch.optim.lr_scheduler as LS
 from torch.autograd import Variable
 
 
+from dataset import get_loader
 from evaluate import run_eval
-from util import get_models, init_lstm, set_train, set_eval
+from util import get_models, init_lstm, set_train, set_eval, load_model
 
-def load_eval_model
+from test_options import parser
+
+def get_eval_loaders(args):
+  # We can extend this dict to evaluate on multiple datasets.
+  eval_loaders = {
+    'TVL': get_loader(
+        is_train=False,
+        root=args.eval, mv_dir=args.eval_mv,
+        args=args),
+  }
+  return eval_loaders
 
 def test():
+
+    args = parser.parse_args()
+    print(args)
     print('Start evaluation...')
+    # Load model
+    nets, solver, milestones, scheduler = load_model(args)
+
+    # Get params from checkpoint
+    names = ['encoder', 'binarizer', 'decoder', 'unet']
+
+    if args.load_model_name:
+        print('Loading %s@iter %d' % (args.load_model_name,
+                                    args.load_iter))
+
+        index = args.load_model_name, args.load_iter
+        train_iter = args.load_iter
+        scheduler.last_epoch = train_iter - 1
+    else:
+        print("please specify the model and iterration for evaluation")
+
+    for net_idx, net in enumerate(nets):
+        if net is not None:
+            name = names[net_idx]
+            checkpoint_path = '{}/{}_{}_{:08d}.pth'.format(
+                args.model_dir, args.save_model_name, 
+                name, index)
+
+            print('Loading %s from %s...' % (name, checkpoint_path))
+            net.load_state_dict(torch.load(checkpoint_path))
 
     set_eval(nets)
 

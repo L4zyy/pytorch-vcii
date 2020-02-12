@@ -53,11 +53,10 @@ parser.add_argument('--clip', type=float, default=0.5,
                     help='Gradient clipping.')
 # parser.add_argument('--schedule', default='15000,40000,100000,250000', type=str,
 #                     help='Schedule milestones.')
-parser.add_argument('--schedule', default='10, 100, 5000,10000,20000,50000,60000,70000,80000,90000,100000', type=str,
-                    help='Schedule milestones.')
+parser.add_argument('--schedule', default='10, 20, 50, 100, 200, 500, 1000, 2000, 5000,10000,20000, 50000, 100000', type=str, help='Schedule milestones.')
 parser.add_argument('--gamma', type=float, default=0.5,
                     help='LR decay factor.')
-parser.add_argument('--batch-size', type=int, default=4, 
+parser.add_argument('--batch-size', type=int, default=6, 
                     help='Batch size.')
 # parser.add_argument('--eval-batch-size', type=int, default=1,
 #                     help='Batch size for evaluation.')
@@ -84,7 +83,7 @@ parser.add_argument('--save-codes', action='store_true',
                     help='If true, write compressed codes during eval.')
 parser.add_argument('--save-out-img', action='store_true',
                     help='If true, save output images during eval.')
-parser.add_argument('--checkpoint-iters', type=int, default=10000,
+parser.add_argument('--checkpoint-iters', type=int, default=100,
                     help='Model checkpoint period.')
-parser.add_argument('--eval-iters', type=int, default=4500,
-                    help='Evaluation period.')
+# parser.add_argument('--eval-iters', type=int, default=4500,
+#                     help='Evaluation period.')
