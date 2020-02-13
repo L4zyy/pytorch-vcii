@@ -34,7 +34,22 @@ def test():
     print(args)
     print('Start evaluation...')
     # Load model
-    nets, solver, milestones, scheduler = load_model(args)
+    encoder, binarizer, decoder, unet = get_models(
+        args=args, v_compress=args.v_compress, 
+        bits=args.bits,
+        encoder_fuse_level=args.encoder_fuse_level,
+        decoder_fuse_level=args.decoder_fuse_level)
+
+    nets = [encoder, binarizer, decoder]
+    if unet is not None:
+        nets.append(unet)
+
+    # Using GPUS
+    gpus = [int(gpu) for gpu in args.gpus.split(',')]
+    if len(gpus) > 1:
+        print("Using GPUs {}.".format(gpus))
+        for net in nets:
+            net = nn.DataParallel(net, device_ids=gpus)
 
     # Get params from checkpoint
     names = ['encoder', 'binarizer', 'decoder', 'unet']
@@ -43,25 +58,30 @@ def test():
         print('Loading %s@iter %d' % (args.load_model_name,
                                     args.load_iter))
 
-        index = args.load_model_name, args.load_iter
+        index = args.load_iter
         train_iter = args.load_iter
-        scheduler.last_epoch = train_iter - 1
     else:
         print("please specify the model and iterration for evaluation")
+        exit(1)
 
     for net_idx, net in enumerate(nets):
         if net is not None:
+            # print(">>target net:")
+            # print(net)
             name = names[net_idx]
             checkpoint_path = '{}/{}_{}_{:08d}.pth'.format(
-                args.model_dir, args.save_model_name, 
+                args.model_dir, args.load_model_name, 
                 name, index)
 
             print('Loading %s from %s...' % (name, checkpoint_path))
-            net.load_state_dict(torch.load(checkpoint_path))
+            loaded_net = torch.load(checkpoint_path)
+            # print(">>loaded:")
+            # print(loaded_net)
+            net.load_state_dict(loaded_net)
 
     set_eval(nets)
 
-    eval_loaders = get_eval_loaders()
+    eval_loaders = get_eval_loaders(args)
     for eval_name, eval_loader in eval_loaders.items():
         eval_begin = time.time()
         eval_loss, mssim, psnr = run_eval(nets, eval_loader, args,
@@ -79,3 +99,5 @@ def test():
 
 
 
+if __name__ == "__main__":
+    test()

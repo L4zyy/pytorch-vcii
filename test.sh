@@ -1,15 +1,15 @@
 #!/bin/bash
-if (( $# != 1 )); then
-    echo "Usage: ./train_and_eval.sh [0-2], e.g. ./train_and_eval.sh 2"
+if (( $# != 3 )); then
+    echo "Usage: ./test.sh [0-2] [checkpoint name] [checkpoint iteration], e.g. ./test.sh 2 demo 101"
     exit
 fi
 hier=$1
+ckpt_name=$2
+ckpt_iter=$3
 
 modeldir=model
 
-train="data/train"
 eval="data/eval"
-train_mv="data/train_mv"
 eval_mv="data/eval_mv"
 
 if [[ ${hier} == "0" ]]; then
@@ -31,7 +31,7 @@ elif [[ ${hier} == "2" ]]; then
   encoder_fuse_level=1
   decoder_fuse_level=1
 else
-  echo "Usage: ./train_and_eval.sh [0-2], e.g. ./train_and_eval.sh 2"
+  echo "Usage: ./test.sh [0-2], e.g. ./test.sh 2 demo 101"
   exit
 fi
 
@@ -41,15 +41,14 @@ fi
 # (for the demo data it's okay.)
 
 
-python -u train_and_eval_original.py \
-  --train ${train} \
+python -u test.py \
   --eval ${eval} \
-  --train-mv ${train_mv} \
   --eval-mv ${eval_mv} \
   --encoder-fuse-level ${encoder_fuse_level} \
   --decoder-fuse-level ${decoder_fuse_level} \
   --v-compress --warp --stack --fuse-encoder \
   --bits ${bits} \
   --distance1 ${distance1} --distance2 ${distance2} \
-  --max-train-iters 100000 \
+  --load-model-name ${ckpt_name} \
+  --load-iter ${ckpt_iter} \
   --save-out-img

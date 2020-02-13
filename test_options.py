@@ -47,8 +47,8 @@ parser.add_argument('--stack', action='store_true',
 ######## Learning ########
 # parser.add_argument('--max-train-iters', type=int, default=100000,
 #                     help='Max training iterations.')
-# parser.add_argument('--lr', type=float, default=0.00025,
-#                     help='Learning rate.')
+parser.add_argument('--lr', type=float, default=0.00025,
+                    help='Learning rate.')
 # parser.add_argument('--clip', type=float, default=0.5,
 #                     help='Gradient clipping.')
 # parser.add_argument('--schedule', default='15000,40000,100000,250000', type=str,
@@ -56,10 +56,10 @@ parser.add_argument('--stack', action='store_true',
 # parser.add_argument('--schedule', default='10, 20, 50, 100, 200, 500, 1000, 2000, 5000,10000,20000, 50000, 100000', type=str, help='Schedule milestones.')
 # parser.add_argument('--gamma', type=float, default=0.5,
 #                     help='LR decay factor.')
-# parser.add_argument('--batch-size', type=int, default=6, 
-#                     help='Batch size.')
-# parser.add_argument('--eval-batch-size', type=int, default=1,
-#                     help='Batch size for evaluation.')
+parser.add_argument('--batch-size', type=int, default=6, 
+                    help='Batch size.')
+parser.add_argument('--eval-batch-size', type=int, default=1,
+                    help='Batch size for evaluation.')
 
 # To save computation, we compute objective for multiple
 # crops for each forward pass.

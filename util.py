@@ -40,7 +40,7 @@ def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
     return encoder, binarizer, decoder, unet
 
 def load_model(args):
-    """Load all pytorch components of the model"""
+    """Load all pytorch components of the model for training"""
 
     # Get pytorch models
     encoder, binarizer, decoder, unet = get_models(

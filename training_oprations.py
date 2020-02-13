@@ -22,7 +22,7 @@ def save(args, nets, index, encoder):
 
     for net_idx, net in enumerate(nets):
         if net is not None:
-            torch.save(encoder.state_dict(), 
+            torch.save(net.state_dict(), 
                                  '{}/{}_{}_{:08d}.pth'.format(
                                      args.model_dir, args.save_model_name, 
                                      names[net_idx], index))

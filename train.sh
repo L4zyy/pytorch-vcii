@@ -1,3 +1,4 @@
+#!/bin/bash
 if (( $# != 1 )); then
     echo "Usage: ./train.sh [0-2], e.g. ./train.sh 2"
     exit
