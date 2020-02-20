@@ -22,7 +22,8 @@ from util import prepare_inputs, forward_ctx
 
 
 def train():
-    
+    """Code for training
+    """    
     # Using the original argument parser
     args = parser.parse_args()
     print(args)

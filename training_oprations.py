@@ -4,6 +4,16 @@
 import torch
 
 def resume(args, nets, index):
+    """resume training
+    
+    Arguments:
+        args {argparse} -- The arguments object specified in training_only_options
+        nets {[nn.Module]} -- ['encoder', 'binarizer', 'decoder', 'unet'] for VCII network
+        index {[type]} -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """    
     names = ['encoder', 'binarizer', 'decoder', 'unet']
 
     for net_idx, net in enumerate(nets):
