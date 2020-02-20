@@ -1,3 +1,4 @@
+
 """Training options."""
 
 import argparse
@@ -57,7 +58,7 @@ parser.add_argument('--schedule', default='10, 20, 50, 100, 200, 500, 1000, 2000
                     help='Schedule milestones.')
 parser.add_argument('--gamma', type=float, default=0.5,
                     help='LR decay factor.')
-parser.add_argument('--batch-size', type=int, default=8, 
+parser.add_argument('--batch-size', type=int, default=6, 
                     help='Batch size.')
 parser.add_argument('--eval-batch-size', type=int, default=1,
                     help='Batch size for evaluation.')
@@ -86,5 +87,5 @@ parser.add_argument('--save-out-img', action='store_true',
                     help='If true, save output images during eval.')
 parser.add_argument('--checkpoint-iters', type=int, default=100,
                     help='Model checkpoint period.')
-parser.add_argument('--eval-iters', type=int, default=4500,
+parser.add_argument('--eval-iters', type=int, default=100,
                     help='Evaluation period.')
