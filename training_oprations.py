@@ -1,5 +1,5 @@
 """
-     resume and save model training
+     resume and save model for training
 """
 import torch
 

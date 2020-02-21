@@ -63,8 +63,5 @@ def get_motion_xy(videodata, bs=8, method="DS"):
     y_motion = np.zeros(video_shape)
     for f in range(video_shape[0]-1):  # We only want the motion starting from frame 1
         x_motion[f+1,:,:] = tile_array(motion[f, :, :, 1], bs, bs)
-        y_motion[f+1,:,:] = tile_array(motion[f, :, :, 0], bs, bs)
+        y_motion[f+1,:,:] = tile_array(motion[f, :, :, 0], bs, bs)  # Y is the first fourth dimension
     return x_motion, y_motion
-
-def main():
-    pass

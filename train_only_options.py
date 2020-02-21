@@ -1,4 +1,4 @@
-"""Training options."""
+"""Training only options."""
 
 import argparse
 

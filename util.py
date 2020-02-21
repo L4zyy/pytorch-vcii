@@ -16,7 +16,18 @@ from metric import msssim, psnr
 from unet import UNet
 
 def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
-    """Build the network of the model"""
+    """build the pytorch network architecture for VCII
+    
+    Arguments:
+        args {argparse} -- Arguments defined for the network
+        v_compress {boolean} -- [description]
+        bits {[type]} -- [description]
+        encoder_fuse_level {[type]} -- [description]
+        decoder_fuse_level {[type]} -- [description]
+    
+    Returns:
+        encoder, binarizer, decoder, unet -- [description]
+    """    
     encoder = network.EncoderCell(
         v_compress=v_compress,
         stack=args.stack,
@@ -40,7 +51,11 @@ def get_models(args, v_compress, bits, encoder_fuse_level, decoder_fuse_level):
     return encoder, binarizer, decoder, unet
 
 def load_model(args):
-    """Load all pytorch components of the model for training"""
+    """Load all pytorch components of the model for training
+    
+    Returns:
+        nets, solver, milestones, scheduler -- [description]
+    """    
 
     # Get pytorch models
     encoder, binarizer, decoder, unet = get_models(
