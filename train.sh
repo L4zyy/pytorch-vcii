@@ -7,10 +7,18 @@ hier=$1
 
 modeldir=model
 
-train="data/train"
-eval="data/eval"
-train_mv="data/train_mv"
-eval_mv="data/eval_mv"
+# train="data/train"
+# eval="data/eval"
+# train_mv="data/train_mv"
+# eval_mv="data/eval_mv"
+# train="of/train"
+# eval="of/eval"
+# train_mv="of/train_mv"
+# eval_mv="of/eval_mv"
+train="/mnt/nfs/scratch1/zhiyilai/vcii/data/train"
+eval="/mnt/nfs/scratch1/zhiyilai/vcii/data/val"
+train_mv="/mnt/nfs/scratch1/zhiyilai/vcii/data/train_of"
+eval_mv="/mnt/nfs/scratch1/zhiyilai/vcii/data/val_of"
 
 if [[ ${hier} == "0" ]]; then
   distance1=6
@@ -27,7 +35,7 @@ elif [[ ${hier} == "1" ]]; then
 elif [[ ${hier} == "2" ]]; then
   distance1=1
   distance2=2
-  bits=8
+  bits=48
   encoder_fuse_level=1
   decoder_fuse_level=1
 else
@@ -49,4 +57,7 @@ python -u train.py \
   --v-compress --warp --stack --fuse-encoder \
   --bits ${bits} \
   --distance1 ${distance1} --distance2 ${distance2} \
-  --max-train-iters 10000
+  --save-model-name of-48 \
+  --load-model-name of-48 \
+  --load-iter 100001 \
+  --max-train-iters 150001

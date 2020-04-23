@@ -2,3 +2,17 @@
 train_ids
 data
 demo_data
+
+# python
+__pycache__
+
+# cluster
+cluster_scripts
+res_*
+
+# model output
+output
+model
+of_8_model
+of_8_
+of_8_output

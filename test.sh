@@ -9,8 +9,12 @@ ckpt_iter=$3
 
 modeldir=model
 
-eval="data/eval"
-eval_mv="data/eval_mv"
+# eval="data/eval"
+# eval_mv="data/eval_mv"
+# eval="of/eval"
+# eval_mv="of/eval_mv"
+eval="/mnt/nfs/scratch1/zhiyilai/vcii/data/test"
+eval_mv="/mnt/nfs/scratch1/zhiyilai/vcii/data/test_of"
 
 if [[ ${hier} == "0" ]]; then
   distance1=6
@@ -27,7 +31,7 @@ elif [[ ${hier} == "1" ]]; then
 elif [[ ${hier} == "2" ]]; then
   distance1=1
   distance2=2
-  bits=8
+  bits=48
   encoder_fuse_level=1
   decoder_fuse_level=1
 else
@@ -51,4 +55,4 @@ python -u test.py \
   --distance1 ${distance1} --distance2 ${distance2} \
   --load-model-name ${ckpt_name} \
   --load-iter ${ckpt_iter} \
-  --save-out-img
+  # --save-out-img

@@ -2,6 +2,7 @@ import numpy as np
 import youtube_dl
 import subprocess
 import sys
+import logging
 
 class MyLogger(object):
     def debug(self, msg):
@@ -19,6 +20,9 @@ class FrameExtractor():
         self.output_dir = output_dir
         self.v_info = None # v_id, start, end
         self.counter = start_point
+
+        self.category = output_dir.split('/')[-2]
+        logging.basicConfig(filename='{}_{}.log'.format(self.category, start_point))
         
     def my_hook(self, d):
         if d['status'] == 'finished':
@@ -38,9 +42,6 @@ class FrameExtractor():
                              '{}{}_{}_{}_%04d.png'.format(self.output_dir, *self.v_info) \
                             ])
             print('Done converting.')
-            subprocess.call(['rm', \
-                 '{}{}_{}_{}.mp4'.format(self.output_dir, *self.v_info) \
-                ])
             
 
     def extract_frames(self, info):
@@ -54,7 +55,15 @@ class FrameExtractor():
         }
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([self.url_starter + self.v_info[0]])
+            try:
+                ydl.download([self.url_starter + self.v_info[0]])
+            except Exception:
+                logging.exception('download video [{}]({}) failed.'.format(self.counter, self.v_info[0]))
+            else:
+                subprocess.call(['rm', \
+                 '{}{}_{}_{}.mp4'.format(self.output_dir, *self.v_info) \
+                ])
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
@@ -68,8 +77,9 @@ if __name__ == '__main__':
     texts = np.genfromtxt(data_list_path,dtype='str')
     data = []
     for t in texts:
-        data.append(t.split('_')) # [id, start, end]
+        data.append(t.rsplit('_', 2)) # [id, start, end]
 
     ext = FrameExtractor(output_dir, int(start))
     for d in data[int(start)-1:int(end)-1]:
         ext.extract_frames(d)
+        break
